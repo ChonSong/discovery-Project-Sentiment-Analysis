@@ -11,12 +11,33 @@ from evaluate import evaluate_model
 
 # 1. Load Data
 df = pd.read_csv("exorde_raw_sample.csv")
-# Assume 'text' column contains your texts, and 'label' contains your sentiment/emotion label
+print(f"Loaded dataset with columns: {list(df.columns)}")
 
 # 2. Downstream Processing (cleaning, lowercasing, etc.)
-df = df.dropna(subset=['text', 'label'])
-texts = df['text'].astype(str).tolist()
-labels = df['label'].astype(int).tolist()
+# Use the correct column names from the dataset
+text_col = 'original_text'
+sentiment_col = 'sentiment'
+
+df = df.dropna(subset=[text_col, sentiment_col])
+texts = df[text_col].astype(str).tolist()
+
+# Convert continuous sentiment scores to categorical labels
+def categorize_sentiment(score):
+    """Convert continuous sentiment score to categorical label."""
+    try:
+        score = float(score)
+        if score < -0.1:
+            return 0  # Negative
+        elif score > 0.1:
+            return 2  # Positive 
+        else:
+            return 1  # Neutral
+    except:
+        return 1  # Default to neutral for invalid scores
+
+labels = [categorize_sentiment(s) for s in df[sentiment_col].tolist()]
+print(f"Processed {len(texts)} samples")
+print(f"Label distribution: Negative={labels.count(0)}, Neutral={labels.count(1)}, Positive={labels.count(2)}")
 
 # 3. Build Vocabulary (for RNN/LSTM/GRU)
 all_tokens = [tok for txt in texts for tok in simple_tokenizer(txt)]
@@ -50,7 +71,7 @@ params = dict(
     vocab_size=len(vocab),
     embed_dim=64,
     hidden_dim=64,
-    num_classes=len(set(labels)),
+    num_classes=3,  # Negative, Neutral, Positive
     num_heads=2,
     num_layers=2
 )
@@ -64,10 +85,18 @@ model.to(device)
 # 7. Training and Evaluation
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 loss_fn = torch.nn.CrossEntropyLoss()
-metric_fn = lambda y_true, y_pred: (y_true == y_pred).float().mean().item()
 
-# Train
-train_model(model, train_loader, optimizer, loss_fn, device)
-# Evaluate
-acc = evaluate_model(model, test_loader, metric_fn, device)
-print(f"Test Accuracy: {acc:.4f}")
+print(f"\nTraining {model_type} model...")
+print("=" * 40)
+
+# Train for multiple epochs with validation
+from train import train_model_epochs
+history = train_model_epochs(model, train_loader, test_loader, optimizer, loss_fn, device, num_epochs=10)
+
+# Final evaluation
+final_accuracy = evaluate_model(model, test_loader, None, device)
+print(f"\nFinal {model_type.upper()} Test Accuracy: {final_accuracy:.4f}")
+
+# Save the trained model
+torch.save(model.state_dict(), f"trained_{model_type}_model.pt")
+print(f"Model saved as: trained_{model_type}_model.pt")

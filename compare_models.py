@@ -2,19 +2,22 @@
 """
 Compare performance of different model architectures.
 
-This script trains all available models and compares their performance.
+This script trains all available models and compares their performance using
+comprehensive metrics including accuracy, F1 score, precision, and recall.
 """
 
 import pandas as pd
 import torch
 import time
+import os
 from sklearn.model_selection import train_test_split
 
 # Import our models and utilities
 from models import RNNModel, LSTMModel, GRUModel, TransformerModel
 from utils import tokenize_texts, simple_tokenizer
 from train import train_model_epochs
-from evaluate import evaluate_model
+from evaluate import evaluate_model, evaluate_model_comprehensive
+from visualize_models import visualize_all_models
 
 def categorize_sentiment(score):
     """Convert continuous sentiment score to categorical label."""
@@ -129,38 +132,62 @@ def main():
                 model, train_loader, test_loader, optimizer, loss_fn, device, num_epochs=3
             )
             
-            # Final evaluation
-            final_accuracy = evaluate_model(model, test_loader, None, device)
+            # Comprehensive evaluation
+            eval_results = evaluate_model_comprehensive(model, test_loader, device)
             training_time = time.time() - start_time
             
             results[name] = {
-                'accuracy': final_accuracy,
+                'accuracy': eval_results['accuracy'],
+                'f1_score': eval_results['f1_score'],
+                'precision': eval_results['precision'],
+                'recall': eval_results['recall'],
                 'time': training_time,
-                'final_loss': history['train_loss'][-1] if history['train_loss'] else 0.0
+                'final_loss': history['train_loss'][-1] if history['train_loss'] else 0.0,
+                'model': model  # Store model for visualization
             }
             
-            print(f"{name} completed - Accuracy: {final_accuracy:.4f}, Time: {training_time:.1f}s")
+            print(f"{name} completed - Accuracy: {eval_results['accuracy']:.4f}, "
+                  f"F1: {eval_results['f1_score']:.4f}, Time: {training_time:.1f}s")
             
         except Exception as e:
             print(f"Error training {name}: {e}")
-            results[name] = {'accuracy': 0.0, 'time': 0.0, 'final_loss': float('inf')}
+            results[name] = {
+                'accuracy': 0.0, 'f1_score': 0.0, 'precision': 0.0, 'recall': 0.0,
+                'time': 0.0, 'final_loss': float('inf'), 'model': None
+            }
+    
+    # Generate model visualizations
+    print("\n" + "=" * 50)
+    print("GENERATING MODEL VISUALIZATIONS")
+    print("=" * 50)
+    
+    try:
+        viz_paths = visualize_all_models(
+            vocab_size=len(vocab), embed_dim=64, hidden_dim=64, 
+            num_classes=3, save_dir="model_visualizations"
+        )
+        print("Model architecture visualizations completed!")
+    except Exception as e:
+        print(f"Error generating visualizations: {e}")
     
     # Display results
     print("\n" + "=" * 50)
     print("FINAL COMPARISON RESULTS")
     print("=" * 50)
-    print(f"{'Model':<12} {'Accuracy':<10} {'Time (s)':<10} {'Final Loss':<12}")
-    print("-" * 50)
+    print(f"{'Model':<12} {'Accuracy':<10} {'F1 Score':<10} {'Precision':<11} {'Recall':<8} {'Time (s)':<10}")
+    print("-" * 75)
     
     for name, result in results.items():
-        print(f"{name:<12} {result['accuracy']:<10.4f} {result['time']:<10.1f} {result['final_loss']:<12.4f}")
+        print(f"{name:<12} {result['accuracy']:<10.4f} {result['f1_score']:<10.4f} "
+              f"{result['precision']:<11.4f} {result['recall']:<8.4f} {result['time']:<10.1f}")
     
-    # Find best model
-    best_model = max(results.items(), key=lambda x: x[1]['accuracy'])
-    print(f"\n🏆 Best Model: {best_model[0]} with {best_model[1]['accuracy']:.4f} accuracy")
-    
-    # Find fastest model
+    # Find best models by different metrics
+    best_accuracy = max(results.items(), key=lambda x: x[1]['accuracy'])
+    best_f1 = max(results.items(), key=lambda x: x[1]['f1_score'])
     fastest_model = min(results.items(), key=lambda x: x[1]['time'])
+    
+    print(f"\n🏆 Best Accuracy: {best_accuracy[0]} with {best_accuracy[1]['accuracy']:.4f}")
+    print(f"🎯 Best F1 Score: {best_f1[0]} with {best_f1[1]['f1_score']:.4f}")
     print(f"⚡ Fastest Model: {fastest_model[0]} trained in {fastest_model[1]['time']:.1f} seconds")
 
 if __name__ == "__main__":

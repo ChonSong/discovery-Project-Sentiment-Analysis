@@ -10,7 +10,13 @@ import torch
 import os
 from torchviz import make_dot
 import matplotlib.pyplot as plt
-from models import RNNModel, LSTMModel, GRUModel, TransformerModel
+from models import (
+    RNNModel, LSTMModel, GRUModel, TransformerModel,
+    DeepRNNModel, BidirectionalRNNModel, RNNWithAttentionModel,
+    StackedLSTMModel, BidirectionalLSTMModel, LSTMWithAttentionModel, LSTMWithPretrainedEmbeddingsModel,
+    StackedGRUModel, BidirectionalGRUModel, GRUWithAttentionModel, GRUWithPretrainedEmbeddingsModel,
+    LightweightTransformerModel, DeepTransformerModel, TransformerWithPoolingModel
+)
 
 def visualize_model_architecture(model, input_tensor, model_name, save_dir="model_visualizations"):
     """
@@ -143,14 +149,37 @@ def visualize_all_models(vocab_size=1000, embed_dim=64, hidden_dim=64, num_class
     batch_size = 2
     sample_input = torch.randint(0, vocab_size, (batch_size, max_seq_len))
     
-    # Model configurations
+    # Enhanced model configurations including all variants
     models_config = {
+        # Original models
         'RNN': RNNModel(vocab_size, embed_dim, hidden_dim, num_classes),
         'LSTM': LSTMModel(vocab_size, embed_dim, hidden_dim, num_classes),
         'GRU': GRUModel(vocab_size, embed_dim, hidden_dim, num_classes),
         'Transformer': TransformerModel(vocab_size, embed_dim, num_heads=4, 
                                       hidden_dim=hidden_dim, num_classes=num_classes, 
-                                      num_layers=2)
+                                      num_layers=2),
+        
+        # RNN variants
+        'Deep_RNN': DeepRNNModel(vocab_size, embed_dim, hidden_dim, num_classes),
+        'Bidirectional_RNN': BidirectionalRNNModel(vocab_size, embed_dim, hidden_dim, num_classes),
+        'RNN_Attention': RNNWithAttentionModel(vocab_size, embed_dim, hidden_dim, num_classes),
+        
+        # LSTM variants
+        'Stacked_LSTM': StackedLSTMModel(vocab_size, embed_dim, hidden_dim, num_classes),
+        'Bidirectional_LSTM': BidirectionalLSTMModel(vocab_size, embed_dim, hidden_dim, num_classes),
+        'LSTM_Attention': LSTMWithAttentionModel(vocab_size, embed_dim, hidden_dim, num_classes),
+        'LSTM_Pretrained': LSTMWithPretrainedEmbeddingsModel(vocab_size, embed_dim, hidden_dim, num_classes),
+        
+        # GRU variants
+        'Stacked_GRU': StackedGRUModel(vocab_size, embed_dim, hidden_dim, num_classes),
+        'Bidirectional_GRU': BidirectionalGRUModel(vocab_size, embed_dim, hidden_dim, num_classes),
+        'GRU_Attention': GRUWithAttentionModel(vocab_size, embed_dim, hidden_dim, num_classes),
+        'GRU_Pretrained': GRUWithPretrainedEmbeddingsModel(vocab_size, embed_dim, hidden_dim, num_classes),
+        
+        # Transformer variants
+        'Lightweight_Transformer': LightweightTransformerModel(vocab_size, 32, 2, 32, num_classes),
+        'Deep_Transformer': DeepTransformerModel(vocab_size, embed_dim, 4, hidden_dim, num_classes),
+        'Transformer_Pooling': TransformerWithPoolingModel(vocab_size, embed_dim, 4, hidden_dim, num_classes)
     }
     
     visualization_paths = {}

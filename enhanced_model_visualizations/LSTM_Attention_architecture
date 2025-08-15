@@ -1,0 +1,7 @@
+digraph {
+	graph [dpi=300 size="12,8"]
+	node [align=left fontname=monospace fontsize=10 height=0.2 ranksep=0.1 shape=box style=filled]
+	edge [fontsize=8]
+	140557998958352 [label="
+ (2, 3)" fillcolor=darkolivegreen1]
+}

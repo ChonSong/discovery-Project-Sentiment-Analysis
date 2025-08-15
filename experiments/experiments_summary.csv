@@ -1,0 +1,11 @@
+experiment_id,model_name,status,duration,start_time,hp_embed_dim,hp_hidden_dim,hp_batch_size,hp_learning_rate,hp_num_epochs,hp_dropout_rate,hp_weight_decay,hp_gradient_clip_value,metric_accuracy,metric_f1_score,metric_precision,metric_recall,metric_classification_report,metric_predictions,metric_truths
+LSTM_GloVe_Test_20250815_061356,LSTM_GloVe_Test,completed,1.244755,2025-08-15T06:13:56.862603,50,64,16,0.001,8,0.3,0.0001,1.0,1.0,1.0,1.0,1.0,"{'Negative': {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 40.0}, 'Neutral': {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 20.0}, 'Positive': {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 40.0}, 'accuracy': 1.0, 'macro avg': {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 100.0}, 'weighted avg': {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 100.0}}","[1 2 1 0 0 2 0 0 2 1 0 2 2 1 2 0 0 0 0 1 0 1 1 2 2 2 2 2 2 0 2 2 2 1 0 2 0
+ 0 2 0 2 2 0 2 1 2 0 2 2 2 1 0 0 0 0 2 0 0 1 2 2 0 2 0 1 1 0 2 2 2 2 2 2 0
+ 1 2 1 1 2 0 0 1 0 0 0 0 0 0 2 2 0 0 2 1 0 1 0 1 2 0]","[1 2 1 0 0 2 0 0 2 1 0 2 2 1 2 0 0 0 0 1 0 1 1 2 2 2 2 2 2 0 2 2 2 1 0 2 0
+ 0 2 0 2 2 0 2 1 2 0 2 2 2 1 0 0 0 0 2 0 0 1 2 2 0 2 0 1 1 0 2 2 2 2 2 2 0
+ 1 2 1 1 2 0 0 1 0 0 0 0 0 0 2 2 0 0 2 1 0 1 0 1 2 0]"
+GRU_Baseline_Test_20250815_061358,GRU_Baseline_Test,completed,0.660491,2025-08-15T06:13:58.108133,50,64,16,0.001,8,0.3,0.0001,1.0,1.0,1.0,1.0,1.0,"{'Negative': {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 40.0}, 'Neutral': {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 20.0}, 'Positive': {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 40.0}, 'accuracy': 1.0, 'macro avg': {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 100.0}, 'weighted avg': {'precision': 1.0, 'recall': 1.0, 'f1-score': 1.0, 'support': 100.0}}","[0 1 0 0 2 2 0 0 1 0 2 1 2 0 0 2 2 0 0 1 1 1 2 0 2 0 0 2 2 1 0 2 0 2 1 0 0
+ 0 2 2 2 2 2 1 0 2 2 0 2 0 2 2 0 0 0 2 1 2 0 2 2 0 1 2 2 2 0 0 0 2 0 1 1 2
+ 2 2 2 2 2 0 0 1 1 0 0 1 0 1 2 2 2 1 1 0 0 0 0 0 1 2]","[0 1 0 0 2 2 0 0 1 0 2 1 2 0 0 2 2 0 0 1 1 1 2 0 2 0 0 2 2 1 0 2 0 2 1 0 0
+ 0 2 2 2 2 2 1 0 2 2 0 2 0 2 2 0 0 0 2 1 2 0 2 2 0 1 2 2 2 0 0 0 2 0 1 1 2
+ 2 2 2 2 2 0 0 1 1 0 0 1 0 1 2 2 2 1 1 0 0 0 0 0 1 2]"

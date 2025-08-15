@@ -12,9 +12,9 @@ def tokenize_texts(texts, model_type, vocab, transformer_tokenizer=None):
         input_ids = []
         for text in texts:
             tokens = text.lower().split()
-            ids = [vocab.get(tok, vocab['<unk>']) for tok in tokens]
+            ids = [vocab.get(tok, vocab.get('<UNK>', vocab.get('<unk>', 1))) for tok in tokens]
             # Pad to max_len
-            ids += [vocab['<pad>']] * (max_len - len(ids))
+            ids += [vocab.get('<PAD>', vocab.get('<pad>', 0))] * (max_len - len(ids))
             input_ids.append(ids)
         input_ids = torch.tensor(input_ids)
         return input_ids, None

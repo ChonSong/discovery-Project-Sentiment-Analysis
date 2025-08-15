@@ -1,8 +1,8 @@
 import torch
 
-def train_model(model, dataloader, optimizer, loss_fn, device):
+def train_model(model, dataloader, optimizer, loss_fn, device, gradient_clip_value=1.0):
     """
-    Train a model for one epoch.
+    Train a model for one epoch with gradient clipping.
     
     Args:
         model: PyTorch model to train
@@ -10,6 +10,7 @@ def train_model(model, dataloader, optimizer, loss_fn, device):
         optimizer: Optimizer for updating model parameters
         loss_fn: Loss function
         device: Device to run training on (cpu/cuda)
+        gradient_clip_value: Maximum gradient norm for clipping (None to disable)
     
     Returns:
         Average loss for the epoch
@@ -17,6 +18,7 @@ def train_model(model, dataloader, optimizer, loss_fn, device):
     model.train()
     total_loss = 0.0
     num_batches = 0
+    total_grad_norm = 0.0
     
     for inputs, labels in dataloader:
         inputs, labels = inputs.to(device), labels.to(device)
@@ -30,17 +32,25 @@ def train_model(model, dataloader, optimizer, loss_fn, device):
         
         # Backward pass
         loss.backward()
+        
+        # Gradient clipping to prevent exploding gradients (common in RNNs)
+        if gradient_clip_value is not None:
+            grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip_value)
+            total_grad_norm += grad_norm.item()
+        
         optimizer.step()
         
         total_loss += loss.item()
         num_batches += 1
     
     average_loss = total_loss / num_batches if num_batches > 0 else 0.0
-    return average_loss
+    average_grad_norm = total_grad_norm / num_batches if num_batches > 0 else 0.0
+    
+    return average_loss, average_grad_norm
 
-def train_model_epochs(model, train_loader, val_loader, optimizer, loss_fn, device, num_epochs=10, scheduler=None):
+def train_model_epochs(model, train_loader, val_loader, optimizer, loss_fn, device, num_epochs=10, scheduler=None, gradient_clip_value=1.0):
     """
-    Train a model for multiple epochs with validation and learning rate scheduling.
+    Train a model for multiple epochs with validation, learning rate scheduling, and gradient clipping.
     
     Args:
         model: PyTorch model to train
@@ -51,6 +61,7 @@ def train_model_epochs(model, train_loader, val_loader, optimizer, loss_fn, devi
         device: Device to run training on
         num_epochs: Number of epochs to train
         scheduler: Learning rate scheduler (optional)
+        gradient_clip_value: Maximum gradient norm for clipping (None to disable)
     
     Returns:
         Dictionary with training history
@@ -60,24 +71,28 @@ def train_model_epochs(model, train_loader, val_loader, optimizer, loss_fn, devi
     history = {
         'train_loss': [],
         'val_accuracy': [],
-        'learning_rates': []
+        'learning_rates': [],
+        'gradient_norms': []
     }
     
     print(f"Training for {num_epochs} epochs...")
     if scheduler is not None:
         print(f"Using learning rate scheduler: {type(scheduler).__name__}")
+    if gradient_clip_value is not None:
+        print(f"Using gradient clipping with max norm: {gradient_clip_value}")
     
     best_val_acc = 0.0
     patience_counter = 0
     early_stop_patience = 10
     
     for epoch in range(num_epochs):
-        # Training
-        train_loss = train_model(model, train_loader, optimizer, loss_fn, device)
+        # Training with gradient clipping
+        train_loss, avg_grad_norm = train_model(model, train_loader, optimizer, loss_fn, device, gradient_clip_value)
         
         # Get current learning rate
         current_lr = optimizer.param_groups[0]['lr']
         history['learning_rates'].append(current_lr)
+        history['gradient_norms'].append(avg_grad_norm)
         
         # Validation
         if val_loader is not None:
@@ -100,7 +115,7 @@ def train_model_epochs(model, train_loader, val_loader, optimizer, loss_fn, devi
             else:
                 patience_counter += 1
             
-            print(f"Epoch {epoch+1}/{num_epochs} - Train Loss: {train_loss:.4f}, Val Accuracy: {val_acc:.4f}, LR: {current_lr:.6f}")
+            print(f"Epoch {epoch+1}/{num_epochs} - Train Loss: {train_loss:.4f}, Val Accuracy: {val_acc:.4f}, LR: {current_lr:.6f}, Grad Norm: {avg_grad_norm:.4f}")
             
             # Early stopping
             if patience_counter >= early_stop_patience:
@@ -111,7 +126,7 @@ def train_model_epochs(model, train_loader, val_loader, optimizer, loss_fn, devi
             # No validation loader, just step scheduler if it doesn't need validation metric
             if scheduler is not None and 'ReduceLROnPlateau' not in str(type(scheduler)):
                 scheduler.step()
-            print(f"Epoch {epoch+1}/{num_epochs} - Train Loss: {train_loss:.4f}, LR: {current_lr:.6f}")
+            print(f"Epoch {epoch+1}/{num_epochs} - Train Loss: {train_loss:.4f}, LR: {current_lr:.6f}, Grad Norm: {avg_grad_norm:.4f}")
         
         history['train_loss'].append(train_loss)
     

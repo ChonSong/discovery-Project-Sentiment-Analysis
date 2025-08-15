@@ -1,0 +1,206 @@
+[
+  {
+    "experiment_id": "LSTM_GloVe_Test_20250815_061356",
+    "model_name": "LSTM_GloVe_Test",
+    "description": "Quick test with GloVe embeddings",
+    "hyperparameters": {
+      "embed_dim": 50,
+      "hidden_dim": 64,
+      "batch_size": 16,
+      "learning_rate": 0.001,
+      "num_epochs": 8,
+      "dropout_rate": 0.3,
+      "weight_decay": 0.0001,
+      "gradient_clip_value": 1.0
+    },
+    "start_time": "2025-08-15T06:13:56.862603",
+    "end_time": "2025-08-15T06:13:58.107358",
+    "duration": 1.244755,
+    "metrics": {
+      "accuracy": 1.0,
+      "f1_score": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "classification_report": {
+        "Negative": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 40.0
+        },
+        "Neutral": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 20.0
+        },
+        "Positive": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 40.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 100.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 100.0
+        }
+      },
+      "predictions": "[1 2 1 0 0 2 0 0 2 1 0 2 2 1 2 0 0 0 0 1 0 1 1 2 2 2 2 2 2 0 2 2 2 1 0 2 0\n 0 2 0 2 2 0 2 1 2 0 2 2 2 1 0 0 0 0 2 0 0 1 2 2 0 2 0 1 1 0 2 2 2 2 2 2 0\n 1 2 1 1 2 0 0 1 0 0 0 0 0 0 2 2 0 0 2 1 0 1 0 1 2 0]",
+      "truths": "[1 2 1 0 0 2 0 0 2 1 0 2 2 1 2 0 0 0 0 1 0 1 1 2 2 2 2 2 2 0 2 2 2 1 0 2 0\n 0 2 0 2 2 0 2 1 2 0 2 2 2 1 0 0 0 0 2 0 0 1 2 2 0 2 0 1 1 0 2 2 2 2 2 2 0\n 1 2 1 1 2 0 0 1 0 0 0 0 0 0 2 2 0 0 2 1 0 1 0 1 2 0]"
+    },
+    "training_history": {
+      "train_loss": [
+        1.0643477058410644,
+        0.8998586440086365,
+        0.27255201250314715,
+        0.07623370230197907,
+        0.016811240762472153,
+        0.007059188783168793,
+        0.00544176428578794,
+        0.005200706059113145
+      ],
+      "val_accuracy": [
+        0.5899999737739563,
+        0.800000011920929,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "learning_rates": [
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.0005,
+        0.0005
+      ],
+      "gradient_norms": [
+        0.28083113849163055,
+        0.4648951017856598,
+        0.3716000428795814,
+        0.1640215754508972,
+        0.06291491761803628,
+        0.02927903465926647,
+        0.023854489810764788,
+        0.02307338997721672
+      ]
+    },
+    "status": "completed"
+  },
+  {
+    "experiment_id": "GRU_Baseline_Test_20250815_061358",
+    "model_name": "GRU_Baseline_Test",
+    "description": "Quick test without pre-trained embeddings",
+    "hyperparameters": {
+      "embed_dim": 50,
+      "hidden_dim": 64,
+      "batch_size": 16,
+      "learning_rate": 0.001,
+      "num_epochs": 8,
+      "dropout_rate": 0.3,
+      "weight_decay": 0.0001,
+      "gradient_clip_value": 1.0
+    },
+    "start_time": "2025-08-15T06:13:58.108133",
+    "end_time": "2025-08-15T06:13:58.768624",
+    "duration": 0.660491,
+    "metrics": {
+      "accuracy": 1.0,
+      "f1_score": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "classification_report": {
+        "Negative": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 40.0
+        },
+        "Neutral": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 20.0
+        },
+        "Positive": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 40.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 100.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 100.0
+        }
+      },
+      "predictions": "[0 1 0 0 2 2 0 0 1 0 2 1 2 0 0 2 2 0 0 1 1 1 2 0 2 0 0 2 2 1 0 2 0 2 1 0 0\n 0 2 2 2 2 2 1 0 2 2 0 2 0 2 2 0 0 0 2 1 2 0 2 2 0 1 2 2 2 0 0 0 2 0 1 1 2\n 2 2 2 2 2 0 0 1 1 0 0 1 0 1 2 2 2 1 1 0 0 0 0 0 1 2]",
+      "truths": "[0 1 0 0 2 2 0 0 1 0 2 1 2 0 0 2 2 0 0 1 1 1 2 0 2 0 0 2 2 1 0 2 0 2 1 0 0\n 0 2 2 2 2 2 1 0 2 2 0 2 0 2 2 0 0 0 2 1 2 0 2 2 0 1 2 2 2 0 0 0 2 0 1 1 2\n 2 2 2 2 2 0 0 1 1 0 0 1 0 1 2 2 2 1 1 0 0 0 0 0 1 2]"
+    },
+    "training_history": {
+      "train_loss": [
+        0.9297355556488037,
+        0.4380043277144432,
+        0.06362827867269516,
+        0.011939853485673666,
+        0.006916525699198246,
+        0.005139120416715741,
+        0.0042267141677439215,
+        0.004214795473963022
+      ],
+      "val_accuracy": [
+        0.8899999856948853,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "learning_rates": [
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.0005,
+        0.0005,
+        0.0005
+      ],
+      "gradient_norms": [
+        0.5497569239139557,
+        0.5178904759883881,
+        0.18623351246118547,
+        0.05440971106290817,
+        0.033855609446763996,
+        0.024676432348787785,
+        0.02093136642128229,
+        0.02100260555744171
+      ]
+    },
+    "status": "completed"
+  }
+]

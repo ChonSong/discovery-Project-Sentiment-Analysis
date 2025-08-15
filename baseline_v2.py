@@ -51,7 +51,7 @@ def create_lr_scheduler(optimizer, scheduler_type='plateau', **kwargs):
     """Create learning rate scheduler based on type."""
     if scheduler_type == 'plateau':
         return optim.lr_scheduler.ReduceLROnPlateau(
-            optimizer, mode='max', factor=0.5, patience=5, verbose=True, **kwargs
+            optimizer, mode='max', factor=0.5, patience=5, **kwargs
         )
     elif scheduler_type == 'step':
         return optim.lr_scheduler.StepLR(

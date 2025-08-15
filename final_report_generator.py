@@ -111,11 +111,11 @@ def create_baseline_comparison_chart(data):
     for bar in bars1:
         height = bar.get_height()
         ax1.annotate(f'{height:.3f}', xy=(bar.get_x() + bar.get_width()/2, height),
-                    ха='center', va='bottom', fontsize=9)
+                    ha='center', va='bottom', fontsize=9)
     for bar in bars2:
         height = bar.get_height()
         ax1.annotate(f'{height:.3f}', xy=(bar.get_x() + bar.get_width()/2, height),
-                    ха='center', va='bottom', fontsize=9)
+                    ha='center', va='bottom', fontsize=9)
     
     # Chart 2: Overall progression journey
     stages = ['Baseline V1\n(Initial)', 'Baseline V2\n(Foundational)', 'Final Model\n(Optimized)']
@@ -132,10 +132,10 @@ def create_baseline_comparison_chart(data):
     for i, (bar, improvement) in enumerate(zip(bars, improvements)):
         height = bar.get_height()
         ax2.annotate(f'{height:.3f}', xy=(bar.get_x() + bar.get_width()/2, height),
-                    ха='center', va='bottom', fontweight='bold')
+                    ha='center', va='bottom', fontweight='bold')
         if i > 0:
             ax2.annotate(f'+{improvement:.1f}%', xy=(bar.get_x() + bar.get_width()/2, height + 0.02),
-                        ха='center', va='bottom', fontsize=10, color='green', fontweight='bold')
+                        ha='center', va='bottom', fontsize=10, color='green', fontweight='bold')
     
     plt.tight_layout()
     plt.savefig('final_report_baseline_progression.png', dpi=300, bbox_inches='tight')
@@ -192,7 +192,7 @@ def create_optimization_analysis_chart(data):
         for i, (bar, max_val) in enumerate(zip(bars, model_performance['max'])):
             ax.annotate(f'Max: {max_val:.3f}', 
                        xy=(bar.get_x() + bar.get_width()/2, bar.get_height() + model_performance['std'].iloc[i]),
-                       ха='center', va='bottom', fontsize=9, color='red')
+                       ha='center', va='bottom', fontsize=9, color='red')
     
     # 2. Learning rate impact
     if 'learning_rate' in opt_df.columns:
@@ -281,7 +281,7 @@ def create_final_performance_summary(data):
     for bar, value in zip(bars, values):
         height = bar.get_height()
         ax.annotate(f'{value:.3f}', xy=(bar.get_x() + bar.get_width()/2, height),
-                   ха='center', va='bottom', fontweight='bold')
+                   ha='center', va='bottom', fontweight='bold')
     
     # Add target line
     ax.axhline(y=0.75, color='red', linestyle='--', alpha=0.7, label='Target (75%)')
@@ -303,7 +303,7 @@ def create_final_performance_summary(data):
     for bar, pct in zip(bars, achievement):
         height = bar.get_height()
         ax.annotate(f'{pct:.1f}%', xy=(bar.get_x() + bar.get_width()/2, height),
-                   ха='center', va='bottom', fontweight='bold')
+                   ha='center', va='bottom', fontweight='bold')
     
     # 3. Training progression (simulated)
     ax = axes[1, 0]
@@ -334,7 +334,7 @@ def create_final_performance_summary(data):
     for bar, f1, support in zip(bars, class_f1, class_support):
         height = bar.get_height()
         ax.annotate(f'{f1:.3f}\n(n={support})', xy=(bar.get_x() + bar.get_width()/2, height/2),
-                   ха='center', va='center', fontweight='bold')
+                   ha='center', va='center', fontweight='bold')
     
     plt.tight_layout()
     plt.savefig('final_report_performance_summary.png', dpi=300, bbox_inches='tight')

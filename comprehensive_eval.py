@@ -9,7 +9,8 @@ and demonstration with example sentences all in one place.
 import os
 import sys
 import argparse
-from models import RNNModel, LSTMModel, GRUModel, TransformerModel
+from models import (RNNModel, LSTMModel, GRUModel, TransformerModel,
+                   RNNModelEmotion, LSTMModelEmotion, GRUModelEmotion, TransformerModelEmotion)
 from evaluate import evaluate_model_comprehensive
 from visualize_models import visualize_all_models
 from demo_examples import demonstrate_sentiment_analysis
@@ -22,7 +23,8 @@ from train import train_model_epochs
 def main():
     parser = argparse.ArgumentParser(description='Comprehensive sentiment analysis evaluation')
     parser.add_argument('--model', type=str, default='all', 
-                       choices=['all', 'rnn', 'lstm', 'gru', 'transformer'],
+                       choices=['all', 'rnn', 'lstm', 'gru', 'transformer',
+                               'rnn-emotion', 'lstm-emotion', 'gru-emotion', 'transformer-emotion'],
                        help='Model type to train and evaluate')
     parser.add_argument('--epochs', type=int, default=5,
                        help='Number of training epochs')
@@ -55,7 +57,8 @@ def main():
     if args.demo:
         print("\n🎯 Running Example Sentence Demonstrations...")
         if args.model == 'all':
-            for model_type in ['rnn', 'lstm', 'gru', 'transformer']:
+            for model_type in ['rnn', 'lstm', 'gru', 'transformer',
+                              'rnn-emotion', 'lstm-emotion', 'gru-emotion', 'transformer-emotion']:
                 print(f"\n--- {model_type.upper()} Model ---")
                 try:
                     demonstrate_sentiment_analysis(model_type, args.epochs)

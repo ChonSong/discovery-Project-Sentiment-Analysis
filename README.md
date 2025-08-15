@@ -8,11 +8,13 @@ This project provides a complete pipeline for sentiment analysis using various d
 
 ## Features
 
-- **Multiple Model Architectures**: RNN, LSTM, GRU, and Transformer models
-- **Emotion Detection**: Both sentiment and emotion classification capabilities
+- **Multiple Model Architectures**: RNN, LSTM, GRU, and Transformer models (8 variants total)
+- **Emotion Detection**: Both sentiment and emotion classification capabilities with specialized model variants
+- **Enhanced Model Variants**: Standard and emotion-enhanced versions of each architecture
 - **Data Pipeline**: Automated data loading and preprocessing from Exorde dataset
 - **Flexible Training**: Configurable training and evaluation scripts
 - **Pre-trained Models**: Support for saving and loading trained models
+- **Comprehensive Comparison**: Side-by-side evaluation of all model variants
 
 ## Dataset
 
@@ -64,12 +66,13 @@ df = download_exorde_sample(sample_size=10000)
 ```
 
 ### Model Training
-Choose from multiple model architectures:
+Choose from multiple model architectures (8 variants available):
 ```python
-from models.rnn import RNNModel
-from models.lstm import LSTMModel
-from models.gru import GRUModel
-from models.transformer import TransformerModel
+# Standard models
+from models import RNNModel, LSTMModel, GRUModel, TransformerModel
+
+# Emotion-enhanced models  
+from models import RNNModelEmotion, LSTMModelEmotion, GRUModelEmotion, TransformerModelEmotion
 
 # Initialize model
 model = RNNModel(vocab_size=1000, embed_dim=64, hidden_dim=64, num_classes=3)
@@ -85,12 +88,45 @@ accuracy = evaluate_model(model, test_loader, metric_fn, device)
 print(f"Model accuracy: {accuracy:.4f}")
 ```
 
+### Quick Training with Different Models
+```bash
+# Train standard models
+python quickstart.py --model rnn --epochs 10
+python quickstart.py --model lstm --epochs 10
+python quickstart.py --model gru --epochs 10
+python quickstart.py --model transformer --epochs 10
+
+# Train emotion-enhanced models
+python quickstart.py --model rnn-emotion --epochs 10
+python quickstart.py --model lstm-emotion --epochs 10
+python quickstart.py --model gru-emotion --epochs 10
+python quickstart.py --model transformer-emotion --epochs 10
+```
+
+### Compare All Models
+```bash
+# Compare all 8 model variants
+python compare_models.py
+
+# Comprehensive evaluation with visualizations
+python comprehensive_eval.py --visualize --demo --model all
+```
+
 ## Model Architectures
 
+### Standard Models
 - **RNN**: Basic recurrent neural network for sequence modeling
 - **LSTM**: Long Short-Term Memory for handling long dependencies
 - **GRU**: Gated Recurrent Unit as a lighter alternative to LSTM
 - **Transformer**: Self-attention based model for state-of-the-art performance
+
+### Emotion-Enhanced Models
+- **RNN-Emotion**: Enhanced RNN with 3 layers and dropout for emotion classification
+- **LSTM-Emotion**: Enhanced LSTM with 3 layers and dropout for emotion classification
+- **GRU-Emotion**: Enhanced GRU with 3 layers and dropout for emotion classification
+- **Transformer-Emotion**: Enhanced Transformer with 4 layers and dropout for emotion classification
+
+All emotion models feature deeper architectures with regularization for improved emotion detection capabilities.
 
 ## Project Structure
 
@@ -100,9 +136,16 @@ print(f"Model accuracy: {accuracy:.4f}")
 │   ├── rnn.py             # RNN implementation
 │   ├── lstm.py            # LSTM implementation
 │   ├── gru.py             # GRU implementation
-│   └── transformer.py     # Transformer implementation
+│   ├── transformer.py     # Transformer implementation
+│   ├── rnn_emotion.py     # Enhanced RNN for emotion classification
+│   ├── lstm_emotion.py    # Enhanced LSTM for emotion classification
+│   ├── gru_emotion.py     # Enhanced GRU for emotion classification
+│   └── transformer_emotion.py # Enhanced Transformer for emotion classification
 ├── getdata.py             # Data downloading script
 ├── exorde_train_eval.py   # Main training and evaluation pipeline
+├── compare_models.py      # Compare all 8 model variants
+├── quickstart.py          # Quick training interface for single models
+├── comprehensive_eval.py  # Comprehensive evaluation with all features
 ├── train.py               # Training functions
 ├── evaluate.py            # Evaluation functions
 ├── utils.py               # Utility functions

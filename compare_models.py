@@ -13,7 +13,8 @@ import os
 from sklearn.model_selection import train_test_split
 
 # Import our models and utilities
-from models import RNNModel, LSTMModel, GRUModel, TransformerModel
+from models import (RNNModel, LSTMModel, GRUModel, TransformerModel,
+                   RNNModelEmotion, LSTMModelEmotion, GRUModelEmotion, TransformerModelEmotion)
 from utils import tokenize_texts, simple_tokenizer
 from train import train_model_epochs
 from evaluate import evaluate_model, evaluate_model_comprehensive
@@ -85,7 +86,11 @@ def main():
         'RNN': {'class': RNNModel, 'type': 'rnn'},
         'LSTM': {'class': LSTMModel, 'type': 'lstm'},
         'GRU': {'class': GRUModel, 'type': 'gru'},
-        'Transformer': {'class': TransformerModel, 'type': 'transformer'}
+        'Transformer': {'class': TransformerModel, 'type': 'transformer'},
+        'RNN-Emotion': {'class': RNNModelEmotion, 'type': 'rnn'},
+        'LSTM-Emotion': {'class': LSTMModelEmotion, 'type': 'lstm'},
+        'GRU-Emotion': {'class': GRUModelEmotion, 'type': 'gru'},
+        'Transformer-Emotion': {'class': TransformerModelEmotion, 'type': 'transformer'}
     }
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -104,7 +109,7 @@ def main():
             test_loader = prepare_data(X_test, y_test, config['type'], vocab)
             
             # Initialize model
-            if name == 'Transformer':
+            if 'Transformer' in name:
                 model = config['class'](
                     vocab_size=len(vocab),
                     embed_dim=64,

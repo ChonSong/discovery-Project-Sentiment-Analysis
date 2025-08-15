@@ -10,7 +10,8 @@ import torch
 import os
 from torchviz import make_dot
 import matplotlib.pyplot as plt
-from models import RNNModel, LSTMModel, GRUModel, TransformerModel
+from models import (RNNModel, LSTMModel, GRUModel, TransformerModel,
+                   RNNModelEmotion, LSTMModelEmotion, GRUModelEmotion, TransformerModelEmotion)
 
 def visualize_model_architecture(model, input_tensor, model_name, save_dir="model_visualizations"):
     """
@@ -150,7 +151,13 @@ def visualize_all_models(vocab_size=1000, embed_dim=64, hidden_dim=64, num_class
         'GRU': GRUModel(vocab_size, embed_dim, hidden_dim, num_classes),
         'Transformer': TransformerModel(vocab_size, embed_dim, num_heads=4, 
                                       hidden_dim=hidden_dim, num_classes=num_classes, 
-                                      num_layers=2)
+                                      num_layers=2),
+        'RNN-Emotion': RNNModelEmotion(vocab_size, embed_dim, hidden_dim, num_classes),
+        'LSTM-Emotion': LSTMModelEmotion(vocab_size, embed_dim, hidden_dim, num_classes),
+        'GRU-Emotion': GRUModelEmotion(vocab_size, embed_dim, hidden_dim, num_classes),
+        'Transformer-Emotion': TransformerModelEmotion(vocab_size, embed_dim, num_heads=4, 
+                                                      hidden_dim=hidden_dim, num_classes=num_classes, 
+                                                      num_layers=4)
     }
     
     visualization_paths = {}

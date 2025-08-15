@@ -3,10 +3,17 @@
 Quick start script for training sentiment analysis models.
 
 Usage:
+    # Basic sentiment models
     python quickstart.py --model rnn
     python quickstart.py --model lstm  
     python quickstart.py --model gru
     python quickstart.py --model transformer
+    
+    # Emotion-enhanced models
+    python quickstart.py --model rnn-emotion
+    python quickstart.py --model lstm-emotion
+    python quickstart.py --model gru-emotion
+    python quickstart.py --model transformer-emotion
 """
 
 import argparse
@@ -16,7 +23,8 @@ import os
 def main():
     parser = argparse.ArgumentParser(description='Train sentiment analysis models')
     parser.add_argument('--model', 
-                       choices=['rnn', 'lstm', 'gru', 'transformer'],
+                       choices=['rnn', 'lstm', 'gru', 'transformer', 
+                               'rnn-emotion', 'lstm-emotion', 'gru-emotion', 'transformer-emotion'],
                        default='rnn',
                        help='Model architecture to train (default: rnn)')
     parser.add_argument('--epochs', 

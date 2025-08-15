@@ -59,7 +59,7 @@ class GRUWithAttentionModel(BaseModel):
 
 class GRUWithPretrainedEmbeddingsModel(BaseModel):
     """GRU with pretrained embeddings support"""
-    def __init__(self, vocab_size, embed_dim, hidden_dim, num_classes, pretrained_embeddings=None):
+    def __init__(self, vocab_size, embed_dim, hidden_dim, num_classes, pretrained_embeddings=None, dropout_rate=0.3):
         super().__init__()
         self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
         
@@ -68,12 +68,17 @@ class GRUWithPretrainedEmbeddingsModel(BaseModel):
             self.embedding.weight.data.copy_(pretrained_embeddings)
             self.embedding.weight.requires_grad = True  # Allow fine-tuning
         
-        self.gru = nn.GRU(embed_dim, hidden_dim, batch_first=True, dropout=0.3)
+        # Enhanced regularization with multiple dropout layers
+        self.embedding_dropout = nn.Dropout(dropout_rate * 0.5)  # Lighter dropout on embeddings
+        self.gru = nn.GRU(embed_dim, hidden_dim, batch_first=True, dropout=dropout_rate)
+        self.hidden_dropout = nn.Dropout(dropout_rate)  # Additional dropout after GRU
         self.fc = nn.Linear(hidden_dim, num_classes)
 
     def forward(self, x):
         x = self.embedding(x)
+        x = self.embedding_dropout(x)  # Dropout on embeddings
         out, _ = self.gru(x)
         out = out[:, -1, :]  # Take last output
+        out = self.hidden_dropout(out)  # Dropout before final layer
         out = self.fc(out)
         return out

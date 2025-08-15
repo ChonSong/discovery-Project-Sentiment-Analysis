@@ -104,7 +104,7 @@ def test_enhanced_training():
             # Setup training with learning rate scheduler
             optimizer = optim.Adam(model.parameters(), lr=1e-3)
             scheduler = optim.lr_scheduler.ReduceLROnPlateau(
-                optimizer, mode='max', factor=0.5, patience=2, verbose=True
+                optimizer, mode='max', factor=0.5, patience=2
             )
             loss_fn = torch.nn.CrossEntropyLoss()
             

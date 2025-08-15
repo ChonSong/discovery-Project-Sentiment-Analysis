@@ -126,7 +126,7 @@ def main():
             # Training setup with learning rate scheduling
             optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
             scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-                optimizer, mode='max', factor=0.5, patience=3, verbose=True
+                optimizer, mode='max', factor=0.5, patience=3
             )
             loss_fn = torch.nn.CrossEntropyLoss()
             

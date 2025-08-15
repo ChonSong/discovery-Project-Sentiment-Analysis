@@ -49,8 +49,8 @@ def main():
         df = pd.read_csv("exorde_raw_sample.csv")
         df = df.dropna(subset=['original_text', 'sentiment'])
         
-        # Use a subset for faster comparison
-        df = df.head(2000)
+        # Use a larger subset for better learning (increased from 2000)
+        df = df.head(8000)
         
         texts = df['original_text'].astype(str).tolist()
         labels = [categorize_sentiment(s) for s in df['sentiment'].tolist()]
@@ -123,13 +123,17 @@ def main():
             
             model.to(device)
             
-            # Training setup
+            # Training setup with learning rate scheduling
             optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+            scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                optimizer, mode='max', factor=0.5, patience=3, verbose=True
+            )
             loss_fn = torch.nn.CrossEntropyLoss()
             
-            # Train model (fewer epochs for comparison)
+            # Train model with increased epochs and scheduler
             history = train_model_epochs(
-                model, train_loader, test_loader, optimizer, loss_fn, device, num_epochs=3
+                model, train_loader, test_loader, optimizer, loss_fn, device, 
+                num_epochs=20, scheduler=scheduler
             )
             
             # Comprehensive evaluation

@@ -38,9 +38,9 @@ def train_model(model, dataloader, optimizer, loss_fn, device):
     average_loss = total_loss / num_batches if num_batches > 0 else 0.0
     return average_loss
 
-def train_model_epochs(model, train_loader, val_loader, optimizer, loss_fn, device, num_epochs=10):
+def train_model_epochs(model, train_loader, val_loader, optimizer, loss_fn, device, num_epochs=10, scheduler=None):
     """
-    Train a model for multiple epochs with validation.
+    Train a model for multiple epochs with validation and learning rate scheduling.
     
     Args:
         model: PyTorch model to train
@@ -50,6 +50,7 @@ def train_model_epochs(model, train_loader, val_loader, optimizer, loss_fn, devi
         loss_fn: Loss function
         device: Device to run training on
         num_epochs: Number of epochs to train
+        scheduler: Learning rate scheduler (optional)
     
     Returns:
         Dictionary with training history
@@ -58,23 +59,61 @@ def train_model_epochs(model, train_loader, val_loader, optimizer, loss_fn, devi
     
     history = {
         'train_loss': [],
-        'val_accuracy': []
+        'val_accuracy': [],
+        'learning_rates': []
     }
     
     print(f"Training for {num_epochs} epochs...")
+    if scheduler is not None:
+        print(f"Using learning rate scheduler: {type(scheduler).__name__}")
+    
+    best_val_acc = 0.0
+    patience_counter = 0
+    early_stop_patience = 10
     
     for epoch in range(num_epochs):
         # Training
         train_loss = train_model(model, train_loader, optimizer, loss_fn, device)
         
+        # Get current learning rate
+        current_lr = optimizer.param_groups[0]['lr']
+        history['learning_rates'].append(current_lr)
+        
         # Validation
         if val_loader is not None:
             val_acc = evaluate_model(model, val_loader, None, device)
             history['val_accuracy'].append(val_acc)
-            print(f"Epoch {epoch+1}/{num_epochs} - Train Loss: {train_loss:.4f}, Val Accuracy: {val_acc:.4f}")
+            
+            # Learning rate scheduling
+            if scheduler is not None:
+                # Handle different scheduler types
+                if hasattr(scheduler, 'step'):
+                    if 'ReduceLROnPlateau' in str(type(scheduler)):
+                        scheduler.step(val_acc)  # ReduceLROnPlateau uses validation metric
+                    else:
+                        scheduler.step()  # Other schedulers just step
+            
+            # Early stopping logic
+            if val_acc > best_val_acc:
+                best_val_acc = val_acc
+                patience_counter = 0
+            else:
+                patience_counter += 1
+            
+            print(f"Epoch {epoch+1}/{num_epochs} - Train Loss: {train_loss:.4f}, Val Accuracy: {val_acc:.4f}, LR: {current_lr:.6f}")
+            
+            # Early stopping
+            if patience_counter >= early_stop_patience:
+                print(f"Early stopping at epoch {epoch+1} (patience: {early_stop_patience})")
+                break
+                
         else:
-            print(f"Epoch {epoch+1}/{num_epochs} - Train Loss: {train_loss:.4f}")
+            # No validation loader, just step scheduler if it doesn't need validation metric
+            if scheduler is not None and 'ReduceLROnPlateau' not in str(type(scheduler)):
+                scheduler.step()
+            print(f"Epoch {epoch+1}/{num_epochs} - Train Loss: {train_loss:.4f}, LR: {current_lr:.6f}")
         
         history['train_loss'].append(train_loss)
     
+    print(f"Training completed. Best validation accuracy: {best_val_acc:.4f}")
     return history

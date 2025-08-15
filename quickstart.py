@@ -21,8 +21,8 @@ def main():
                        help='Model architecture to train (default: rnn)')
     parser.add_argument('--epochs', 
                        type=int,
-                       default=5,
-                       help='Number of training epochs (default: 5)')
+                       default=20,
+                       help='Number of training epochs (default: 20, was 5 in V1)')
     
     args = parser.parse_args()
     

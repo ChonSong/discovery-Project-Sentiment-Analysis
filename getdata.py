@@ -1,7 +1,7 @@
 import pandas as pd
 from datasets import load_dataset
 
-def download_exorde_sample(sample_size: int = 10000, output_path: str = "exorde_raw_sample.csv") -> pd.DataFrame | None:
+def download_exorde_sample(sample_size: int = 50000, output_path: str = "exorde_raw_sample.csv") -> pd.DataFrame | None:
     print(f"Downloading {sample_size} unprocessed rows from Exorde dataset...")
 
     try:

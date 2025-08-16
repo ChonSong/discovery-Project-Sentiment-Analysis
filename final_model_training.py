@@ -25,7 +25,8 @@ from utils import tokenize_texts, simple_tokenizer
 from train import train_model_epochs
 from evaluate import evaluate_model_comprehensive
 from experiment_tracker import ExperimentTracker
-from embedding_utils import create_embedding_matrix
+# Import utilities for embeddings (if needed)
+# from embedding_utils import get_pretrained_embeddings
 
 def categorize_sentiment(score):
     """Convert continuous sentiment score to categorical label."""

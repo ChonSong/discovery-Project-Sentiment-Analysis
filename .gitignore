@@ -156,3 +156,7 @@ Thumbs.db
 
 # Node modules (if any web components)
 node_modules/
+
+# Test artifacts and temporary files
+test_enhanced_models.py
+*_test_*.py

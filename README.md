@@ -64,15 +64,19 @@ df = download_exorde_sample(sample_size=10000)
 ```
 
 ### Model Training
-Choose from multiple model architectures:
+Choose from enhanced model architectures with improved emotion detection:
 ```python
-from models.rnn import RNNModel
-from models.lstm import LSTMModel
-from models.gru import GRUModel
-from models.transformer import TransformerModel
+from models.enhanced import (
+    LSTMModelEmotion, 
+    GRUWithAttentionModel, 
+    TransformerWithPoolingModel
+)
 
-# Initialize model
-model = RNNModel(vocab_size=1000, embed_dim=64, hidden_dim=64, num_classes=3)
+# Initialize enhanced model for emotion detection
+model = LSTMModelEmotion(vocab_size=1000, embed_dim=64, hidden_dim=64, num_classes=3)
+
+# Or use attention-based model
+model = GRUWithAttentionModel(vocab_size=1000, embed_dim=64, hidden_dim=64, num_classes=3)
 
 # Train
 train_model(model, train_loader, optimizer, loss_fn, device)
@@ -87,25 +91,46 @@ print(f"Model accuracy: {accuracy:.4f}")
 
 ## Model Architectures
 
-- **RNN**: Basic recurrent neural network for sequence modeling
-- **LSTM**: Long Short-Term Memory for handling long dependencies
-- **GRU**: Gated Recurrent Unit as a lighter alternative to LSTM
-- **Transformer**: Self-attention based model for state-of-the-art performance
+### Enhanced Unified Models
+The project now features consolidated, enhanced model architectures that improve upon the original implementations:
+
+- **EnhancedLSTMModel**: Unified LSTM with configurable layers, attention, and emotion detection
+- **EnhancedGRUModel**: Advanced GRU with bidirectional processing and attention mechanisms  
+- **EnhancedTransformerModel**: Enhanced transformer with multiple pooling strategies and positional encoding
+- **EnhancedRNNModel**: Improved RNN with regularization and attention support
+
+### Model Variants
+Each enhanced model supports multiple configurations for different use cases:
+
+- **Basic variants**: `LSTMModel`, `GRUModel`, `TransformerModel` (backward compatible)
+- **Emotion variants**: `LSTMModelEmotion`, `GRUModelEmotion` (enhanced regularization)
+- **Attention variants**: `LSTMWithAttentionModel`, `GRUWithAttentionModel` (focus on relevant words)
+- **Advanced variants**: `BidirectionalLSTMModel`, `TransformerWithPoolingModel` (improved context)
+
+### Key Improvements
+- **Unified Architecture**: Single configurable models replace multiple specialized files
+- **Enhanced Emotion Detection**: Improved attention mechanisms for better emotion classification
+- **Better Regularization**: Advanced dropout strategies and gradient clipping
+- **Pretrained Embeddings**: Support for GloVe, Word2Vec, and FastText
+- **Backward Compatibility**: Existing code continues to work without changes
 
 ## Project Structure
 
 ```
-├── models/                 # Neural network model implementations
+├── models/                 # Enhanced neural network implementations
+│   ├── enhanced.py         # Unified enhanced model imports
+│   ├── enhanced_lstm.py    # Enhanced LSTM with emotion detection
+│   ├── enhanced_gru.py     # Enhanced GRU with attention
+│   ├── enhanced_transformer.py # Enhanced transformer with pooling
+│   ├── enhanced_rnn.py     # Enhanced RNN with regularization
 │   ├── base.py            # Base model class
-│   ├── rnn.py             # RNN implementation
-│   ├── lstm.py            # LSTM implementation
-│   ├── gru.py             # GRU implementation
-│   └── transformer.py     # Transformer implementation
+│   └── [legacy files]     # Original model implementations (maintained for compatibility)
 ├── getdata.py             # Data downloading script
 ├── exorde_train_eval.py   # Main training and evaluation pipeline
-├── train.py               # Training functions
-├── evaluate.py            # Evaluation functions
+├── train.py               # Enhanced training functions with scheduling
+├── evaluate.py            # Comprehensive evaluation functions
 ├── utils.py               # Utility functions
+├── FINAL_PROJECT_REPORT.md # Consolidated comprehensive final report
 └── *.csv                  # Data files
 ```
 

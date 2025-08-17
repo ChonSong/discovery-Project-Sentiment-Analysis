@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Test script to validate foundational improvements work correctly.
-This tests the enhanced training pipeline with learning rate scheduling.
+Test script to validate enhanced consolidated models and improvements.
+This tests the new unified architecture with enhanced emotion detection.
 """
 
 import pandas as pd
@@ -9,9 +9,11 @@ import torch
 import torch.optim as optim
 from sklearn.model_selection import train_test_split
 
-# Import our models and utilities
-from models import LSTMModel
-from models.lstm_variants import LSTMWithAttentionModel
+# Import enhanced models and utilities
+from models.enhanced import (
+    LSTMModel, LSTMModelEmotion, LSTMWithAttentionModel,
+    GRUModel, GRUModelEmotion, TransformerWithPoolingModel
+)
 from utils import tokenize_texts, simple_tokenizer
 from train import train_model_epochs
 from evaluate import evaluate_model_comprehensive

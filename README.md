@@ -1,6 +1,6 @@
-# Discovery Project: Sentiment Analysis
+# Automated Sentiment Analysis of Social Media Data
 
-A comprehensive sentiment analysis project that implements multiple neural network architectures for analyzing social media data from the Exorde dataset.
+This project evaluates and compares multiple deep learning architectures for sentiment and emotion classification on large-scale, noisy social media data, aiming to create a reproducible analysis framework.
 
 ## Overview
 
